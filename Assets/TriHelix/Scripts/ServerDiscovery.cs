@@ -92,7 +92,7 @@ public class ServerDiscovery : MonoBehaviour {
 
 		//temp
 #if UNITY_EDITOR || UNITY_STANDALONE
-		isServer = true;
+		//isServer = true;
 #endif
 
 		//Application.is

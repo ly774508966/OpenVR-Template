@@ -12,7 +12,7 @@ public class ClientServerController : MonoBehaviour {
         } else
         {
             Debug.Log("Running Scene as Client");
-            GetComponent<ClientController>().enabled = true;
+            GetComponent<Network_ClientController_SpawnPlayer>().enabled = true;
         }
     }
 	// Use this for initialization

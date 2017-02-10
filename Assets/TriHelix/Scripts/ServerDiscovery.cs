@@ -97,7 +97,7 @@ public class ServerDiscovery : MonoBehaviour {
             if (serverUseOVR)
             {
                 Debug.Log("Running as server forcing , Loading OpenVR -> Oculus -> None");
-                UnityEngine.VR.VRSettings.LoadDeviceByName("OpenVR");
+                UnityEngine.VR.VRSettings.LoadDeviceByName(new string[] { "OpenVR", "Oculus", "None" });
             }
             else
             {

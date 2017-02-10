@@ -77,8 +77,9 @@ namespace Windows
         }
 
         public void Shutdown()
-        {
-            Console.SetOut(oldOutput);
+        {   
+            if(oldOutput != null)
+                Console.SetOut(oldOutput);
             FreeConsole();
         }
 

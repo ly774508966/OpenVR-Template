@@ -1,15 +1,15 @@
-/************************************************************************************
+﻿/************************************************************************************
 
 Copyright   :   Copyright 2014 Oculus VR, LLC. All Rights reserved.
 
-Licensed under the Oculus VR Rift SDK License Version 3.3 (the "License");
+Licensed under the Oculus VR Rift SDK License Version 3.2 (the "License");
 you may not use the Oculus VR Rift SDK except in compliance with the License,
 which is provided at the time of installation or download, or which
 otherwise accompanies this software in either electronic or hard copy form.
 
 You may obtain a copy of the License at
 
-http://www.oculus.com/licenses/LICENSE-3.3
+http://www.oculusvr.com/licenses/LICENSE-3.2
 
 Unless required by applicable law or agreed to in writing, the Oculus VR SDK
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,26 +30,26 @@ using VR = UnityEngine.VR;
 public class OVRTracker
 {
 	/// <summary>
-	/// The (symmetric) visible area in front of the sensor.
+	/// The (symmetric) visible area in front of the tracker.
 	/// </summary>
 	public struct Frustum
 	{
 		/// <summary>
-		/// The sensor's minimum supported distance to the HMD.
+		/// The tracker cannot track the HMD unless it is at least this far away.
 		/// </summary>
 		public float nearZ;
 		/// <summary>
-		/// The sensor's maximum supported distance to the HMD.
+		/// The tracker cannot track the HMD unless it is at least this close.
 		/// </summary>
 		public float farZ;
 		/// <summary>
-		/// The sensor's horizontal and vertical fields of view in degrees.
+		/// The tracker's horizontal and vertical fields of view in degrees.
 		/// </summary>
 		public Vector2 fov;
 	}
 
 	/// <summary>
-	/// If true, a sensor is attached to the system.
+	/// If true, a tracker is attached to the system.
 	/// </summary>
 	public bool isPresent
 	{
@@ -62,7 +62,7 @@ public class OVRTracker
 	}
 
 	/// <summary>
-	/// If true, the sensor is actively tracking the HMD's position. Otherwise the HMD may be temporarily occluded, the system may not support position tracking, etc.
+	/// If true, the tracker can see and track the HMD. Otherwise the HMD may be occluded or the system may be malfunctioning.
 	/// </summary>
 	public bool isPositionTracked
 	{
@@ -72,7 +72,7 @@ public class OVRTracker
 	}
 
 	/// <summary>
-	/// If this is true and a sensor is available, the system will use position tracking when isPositionTracked is also true.
+	/// If this is true and a tracker is available, the system will use position tracking when isPositionTracked is also true.
 	/// </summary>
 	public bool isEnabled
 	{
@@ -92,42 +92,27 @@ public class OVRTracker
 	}
 
 	/// <summary>
-	/// Returns the number of sensors currently connected to the system.
+	/// Gets the tracker's viewing frustum.
 	/// </summary>
-	public int count
+	public Frustum frustum
 	{
 		get {
-			for (int i = 0; i < (int)OVRPlugin.Tracker.Count; ++i)
-			{
-				var frust = OVRPlugin.GetTrackerFrustum((OVRPlugin.Tracker)i);
-				if (frust.fovX == 0f && frust.fovY == 0f)
-					return i;
-			}
+			if (!OVRManager.isHmdPresent)
+				return new Frustum();
 
-			return (int)OVRPlugin.Tracker.Count;
+            return OVRPlugin.GetTrackerFrustum(OVRPlugin.Tracker.Default).ToFrustum();
 		}
 	}
 
 	/// <summary>
-	/// Gets the sensor's viewing frustum.
+	/// Gets the tracker's pose, relative to the head's pose at the time of the last pose recentering.
 	/// </summary>
-	public Frustum GetFrustum(int tracker = 0)
-	{
-		if (!OVRManager.isHmdPresent)
-			return new Frustum();
-
-		return OVRPlugin.GetTrackerFrustum((OVRPlugin.Tracker)tracker).ToFrustum();
-	}
-
-	/// <summary>
-	/// Gets the sensor's pose, relative to the head's pose at the time of the last pose recentering.
-	/// </summary>
-	public OVRPose GetPose(int tracker = 0)
+	public OVRPose GetPose(double predictionTime)
 	{
 		if (!OVRManager.isHmdPresent)
 			return OVRPose.identity;
 
-		var p = OVRPlugin.GetTrackerPose((OVRPlugin.Tracker)tracker).ToOVRPose();
+		var p = OVRPlugin.GetTrackerPose(OVRPlugin.Tracker.Default).ToOVRPose();
 		
 		return new OVRPose()
 		{

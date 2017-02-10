@@ -27,6 +27,7 @@ public class PlayLogger : MonoBehaviour {
     public static PlayLogger Instance;
     public string logFileName = "Playlogger.log";
     private string fullpath;
+    public bool suppressOutput = false;
 
     //to overload debug logs for this class only
     //originally debug logs were copied from SupportLogger.cs
@@ -35,6 +36,8 @@ public class PlayLogger : MonoBehaviour {
     {
         public static void Log(object msg)
         {
+            if (Instance.suppressOutput)
+                return;
             UnityEngine.Debug.Log(msg);
 
             //Last parameters don't matter, reusing previous function that was conforming to callback
@@ -116,7 +119,10 @@ public class PlayLogger : MonoBehaviour {
         StringBuilder sb = new StringBuilder();
         sb.AppendFormat(getLogLinePrefix() + "Info: PUN {0}: ", PhotonNetwork.versionPUN);
 
-        sb.AppendFormat("AppID: {0}*** GameVersion: {1} ", PhotonNetwork.networkingPeer.mAppId.Substring(0, 8), PhotonNetwork.networkingPeer.mAppVersionPun);
+        sb.AppendFormat("AppID: {0}*** GameVersion: {1} ", PhotonNetwork.networkingPeer.mAppId.Length >= 8 ? 
+                                                    PhotonNetwork.networkingPeer.mAppId.Substring(0, 8): 
+                                                    PhotonNetwork.networkingPeer.mAppId, 
+                                                    PhotonNetwork.networkingPeer.mAppVersionPun);
         sb.AppendFormat("Server: {0}. Region: {1} ", PhotonNetwork.ServerAddress, PhotonNetwork.networkingPeer.CloudRegion);
         sb.AppendFormat("HostType: {0} ", PhotonNetwork.PhotonServerSettings.HostType);
 

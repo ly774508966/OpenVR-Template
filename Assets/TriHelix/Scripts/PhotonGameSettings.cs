@@ -9,13 +9,23 @@ public class PhotonGameSettings
     {
         System.Collections.Hashtable table = GameSettings.GetTable("device_markers");
         ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
-        string[] array = new string[table.Count];
-        int num = 0;
-        foreach (DictionaryEntry dictionaryEntry in table)
+        string[] array;
+        if (table != null)
         {
-            array[num] = (string)dictionaryEntry.Key;
-            hashtable.Add(dictionaryEntry.Key, dictionaryEntry.Value);
-            num++;
+            array = new string[table.Count];
+            Debug.Log("Photon Room Custom properties loaded device_marker count: " + table.Count);
+                
+            int num = 0;
+            foreach (DictionaryEntry dictionaryEntry in table)
+            {
+                array[num] = (string)dictionaryEntry.Key;
+                hashtable.Add(dictionaryEntry.Key, dictionaryEntry.Value);
+                num++;
+            }
+        } else
+        {
+            array = new string[0];
+            Debug.Log("Warning! could not load 'device_markers' from gamesettings hashtable");
         }
         PhotonNetwork.room.SetCustomProperties(hashtable, null, false);
         PhotonNetwork.room.SetPropertiesListedInLobby(array);

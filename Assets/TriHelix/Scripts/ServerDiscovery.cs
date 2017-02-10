@@ -83,20 +83,21 @@ public class ServerDiscovery : MonoBehaviour {
 		}
 	}
 
-	void Start () {
-		//TODO:  Restore standalone capability
-		//if (clientIfMobile && (Application.isMobilePlatform || !Application.isEditor))
-			//isServer = false;
-
-		if (clientIfMobile && Application.isMobilePlatform)
-			isServer = false;
+    IEnumerator Start () {
+        //TODO:  Restore standalone capability
+        //if (clientIfMobile && (Application.isMobilePlatform || !Application.isEditor))
+        //isServer = false;
+     
+        
+        if (clientIfMobile && Application.isMobilePlatform)
+            isServer = false;
 
         if (isServer)
         {
             if (serverUseOVR)
             {
                 Debug.Log("Running as server forcing , Loading OpenVR -> Oculus -> None");
-                UnityEngine.VR.VRSettings.LoadDeviceByName(new string[] { "OpenVR", "Oculus", "None" });
+                UnityEngine.VR.VRSettings.LoadDeviceByName("OpenVR");
             }
             else
             {
@@ -108,7 +109,7 @@ public class ServerDiscovery : MonoBehaviour {
         {
 
             Debug.Log("Running as Client on Windows, Loading OpenVR -> Oculus -> None");
-            UnityEngine.VR.VRSettings.LoadDeviceByName(new string [] { "OpenVR","Oculus", "None"});
+            UnityEngine.VR.VRSettings.LoadDeviceByName(new string[] { "OpenVR", "Oculus", "None" });
         }
         else
         {
@@ -118,6 +119,10 @@ public class ServerDiscovery : MonoBehaviour {
 
         }
 
+        yield return null;
+        UnityEngine.VR.VRSettings.enabled = true;
+
+    
 
         //temp
 #if UNITY_EDITOR || UNITY_STANDALONE

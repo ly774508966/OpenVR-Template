@@ -20,9 +20,9 @@ public class Network_ClientController_SpawnPlayer : MonoBehaviour {
 
     void Start()
     {
-        PhotonNetwork.sendRate = 30;
+        PhotonNetwork.sendRate = 60;
 
-        PhotonNetwork.sendRateOnSerialize = 30;
+        PhotonNetwork.sendRateOnSerialize = 60;
 
         Status.Set("Ready", Status.Blip.GOOD);
         PhotonNetwork.isMessageQueueRunning = true;

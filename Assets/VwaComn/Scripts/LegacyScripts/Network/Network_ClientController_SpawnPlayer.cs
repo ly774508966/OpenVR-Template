@@ -6,6 +6,10 @@ public class Network_ClientController_SpawnPlayer : MonoBehaviour {
 
     public GameObject avatarPrefab;
     public Transform headPoint;
+    public Transform CtrlLeftPoint;
+    public Transform CtrlRightPoint;
+    public GameObject AvatarHead, AvatarCtrlLeft, AvatarCtrlRight;
+
 #if UNITY_EDITOR
     public int frameRate = 120;
 
@@ -23,12 +27,33 @@ public class Network_ClientController_SpawnPlayer : MonoBehaviour {
         Status.Set("Ready", Status.Blip.GOOD);
         PhotonNetwork.isMessageQueueRunning = true;
 
-        var go = PhotonNetwork.Instantiate(avatarPrefab.name, Vector3.zero, Quaternion.identity, 0);
+        GameObject go = PhotonNetwork.Instantiate(avatarPrefab.name, Vector3.zero, Quaternion.identity, 0);
+        
+        if (AvatarHead != null && headPoint != null)
+        {
 
-        var hmd = go.GetComponentInChildren<AvatarHMDFollow>().HMDRoot;
-        hmd.parent = headPoint;
-        hmd.localPosition = Vector3.zero;
-        hmd.localRotation = Quaternion.identity;
+            var hmd = go.transform.Find(AvatarHead.name).GetComponent<AvatarHMDFollow>().HMDRoot;
+            hmd.parent = headPoint;
+            hmd.localPosition = Vector3.zero;
+            hmd.localRotation = Quaternion.identity;
+        }
+        if (AvatarCtrlLeft != null && CtrlLeftPoint != null)
+        {
+            var ctrlleft = go.transform.Find(AvatarCtrlLeft.name).GetComponent<AvatarHMDFollow>().HMDRoot;
+            ctrlleft.parent = CtrlLeftPoint;
+            ctrlleft.localPosition = Vector3.zero;
+            ctrlleft.localRotation = Quaternion.identity;
+        }
+
+        if (AvatarCtrlRight != null && CtrlRightPoint != null)
+        {
+
+            var ctrlright = go.transform.Find(AvatarCtrlRight.name).GetComponent<AvatarHMDFollow>().HMDRoot;
+            ctrlright.parent = CtrlRightPoint;
+            ctrlright.localPosition = Vector3.zero;
+            ctrlright.localRotation = Quaternion.identity;
+        }
+
 #if UNITY_EDITOR
 
         Application.targetFrameRate = frameRate;

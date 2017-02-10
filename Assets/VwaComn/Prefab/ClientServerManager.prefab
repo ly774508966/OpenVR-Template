@@ -19,9 +19,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4575915135069490}
-  - component: {fileID: 114877134065792586}
   - component: {fileID: 114103756103281798}
   - component: {fileID: 114617584104099052}
+  - component: {fileID: 114085179474785764}
   m_Layer: 0
   m_Name: ClientServerManager
   m_TagString: Untagged
@@ -42,6 +42,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114085179474785764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1019199673047086}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad80f5b6910013d49be5fedb29a69979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatarPrefab: {fileID: 159228, guid: 760a875c910400544b53a9155ffebc38, type: 2}
+  headPoint: {fileID: 0}
+  CtrlLeftPoint: {fileID: 0}
+  CtrlRightPoint: {fileID: 0}
+  AvatarHead: {fileID: 105030, guid: 760a875c910400544b53a9155ffebc38, type: 2}
+  AvatarCtrlLeft: {fileID: 1612632151203220, guid: 760a875c910400544b53a9155ffebc38,
+    type: 2}
+  AvatarCtrlRight: {fileID: 1122679798537802, guid: 760a875c910400544b53a9155ffebc38,
+    type: 2}
+  frameRate: 120
+  VSYNC0off1full2half: 0
 --- !u!114 &114103756103281798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,16 +86,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13959a45e5149ed4f86b811c03bd53c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114877134065792586
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1019199673047086}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39ca549890e47b246b65c043cc8e5ee1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 159228, guid: 6198d53441d01d54badec2f1126ffd92, type: 2}
-  headPoint: {fileID: 0}

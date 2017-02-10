@@ -35,13 +35,14 @@ public class ServerDiscovery : MonoBehaviour {
 
 	public int discoveryPort = 60000;
 	public bool isServer;
-	public bool clientIfMobile = true;
+    public bool serverUseOVR = false;
+
+    public bool clientIfMobile = true;
 	public int serverPort = 5055;
 	public string serverDescription = "N/A";
 	public bool enableBroadcast = true;
 	public string preferIPRange = "";
-
-
+        
 	public Dictionary<string, ServerInfo> servers = new Dictionary<string, ServerInfo>();
 
 	UdpClient udpClient;
@@ -92,8 +93,16 @@ public class ServerDiscovery : MonoBehaviour {
 
         if (isServer)
         {
-            Debug.Log("Running as Server, Disabling VR, Loading None");
-            UnityEngine.VR.VRSettings.LoadDeviceByName("None");
+            if (serverUseOVR)
+            {
+                Debug.Log("Running as server forcing , Loading OpenVR -> Oculus -> None");
+                UnityEngine.VR.VRSettings.LoadDeviceByName(new string[] { "OpenVR", "Oculus", "None" });
+            }
+            else
+            {
+                Debug.Log("Running as Server, Disabling VR, Loading None");
+                UnityEngine.VR.VRSettings.LoadDeviceByName("None");
+            }
         }
         else if (!isServer && (Application.platform == UnityEngine.RuntimePlatform.WindowsPlayer || Application.platform == UnityEngine.RuntimePlatform.WindowsEditor))
         {

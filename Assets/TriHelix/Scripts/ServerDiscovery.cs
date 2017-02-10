@@ -90,16 +90,36 @@ public class ServerDiscovery : MonoBehaviour {
 		if (clientIfMobile && Application.isMobilePlatform)
 			isServer = false;
 
-		//temp
+        if (isServer)
+        {
+            Debug.Log("Running as Server, Disabling VR, Loading None");
+            UnityEngine.VR.VRSettings.LoadDeviceByName("None");
+        }
+        else if (!isServer && (Application.platform == UnityEngine.RuntimePlatform.WindowsPlayer || Application.platform == UnityEngine.RuntimePlatform.WindowsEditor))
+        {
+
+            Debug.Log("Running as Client on Windows, Loading OpenVR -> Oculus -> None");
+            UnityEngine.VR.VRSettings.LoadDeviceByName(new string [] { "OpenVR","Oculus", "None"});
+        }
+        else
+        {
+            //The current order of VR sdks is Oculus, None, OpenVR to ensure Steamvr doesn't always start
+            Debug.Log("Running as Client on other device (Likely android), Loading Oculus");
+            UnityEngine.VR.VRSettings.LoadDeviceByName("Oculus");
+
+        }
+
+
+        //temp
 #if UNITY_EDITOR || UNITY_STANDALONE
-		//isServer = true;
+        //isServer = true;
 #endif
 
-		//Application.is
-		//temp
-		//isServer = true;
+        //Application.is
+        //temp
+        //isServer = true;
 
-		StartCoroutine(isServer ? "Server" : "Client");
+        StartCoroutine(isServer ? "Server" : "Client");
 	}
 
 	IEnumerator Server () {
@@ -112,7 +132,7 @@ public class ServerDiscovery : MonoBehaviour {
 		//get local ip
 		string localIP = GetLocalIPAddress(preferIPRange);
 
-		Debug.Log("Server IP: " + localIP);
+		Debug.Log("Broadcasted Server IP to clients (Photon Game Server IP Config must match): " + localIP);
 		writer.Write(localIP);
 		writer.Write(serverPort);
 		writer.Write(serverDescription);

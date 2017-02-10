@@ -10,9 +10,14 @@ public class NetworkBootstrap : MonoBehaviour {
 	public string appId;
 	public string clientScene;
 	public string serverScene;
+    public bool retrying = false;
     void OnPhotonCreateRoomFailed(object[] codeAndMsg)
     {
         Debug.Log("Failed to create room." + codeAndMsg[0] + "-" + (string)codeAndMsg[1]);
+    }
+    void OnFailedToConnectToPhoton(DisconnectCause codeAndMsg)
+    {
+        retrying = true;
     }
     IEnumerator Start () {
 		yield return null;
@@ -25,13 +30,31 @@ public class NetworkBootstrap : MonoBehaviour {
 //			PhotonNetwork.PhotonServerSettings.ServerAddress = "192.168.0.4";
 			PhotonNetwork.PhotonServerSettings.ServerPort = ServerDiscovery.Instance.serverPort;
 			PhotonNetwork.ConnectUsingSettings("dev");
+            
+            bool logEnabled = Debug.logger.logEnabled;
 
 			while (!PhotonNetwork.connectedAndReady) {
 				Status.Append(".", Status.Blip.BLIP);
+
+                if(retrying)
+                {    
+                    Debug.Log("Failed to connect to Photon Master Server: " + 
+                        PhotonNetwork.PhotonServerSettings.ServerAddress + ":" +
+                        PhotonNetwork.PhotonServerSettings.ServerPort +
+                        ". Please start Photon Loadbalancer ... Server will automatically start when connected");
+                    retrying = false;
+
+                    PlayLogger.Instance.suppressOutput = true;
+                    Debug.logger.logEnabled = false;
+                    PhotonNetwork.ConnectUsingSettings("dev");
+                }
 				yield return new WaitForSeconds(0.2f);
 			}
+            Debug.logger.logEnabled = logEnabled;
+            PlayLogger.Instance.suppressOutput = false;
 
-			Status.Append("Done", Status.Blip.GOOD);
+
+            Status.Append("Done", Status.Blip.GOOD);
             PhotonNetwork.playerName = "MasterClient";
             PhotonNetwork.JoinLobby();
 

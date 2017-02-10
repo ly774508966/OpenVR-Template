@@ -10,12 +10,15 @@ public static class GameSettings
     static GameSettings()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE //Will throw an exception on android for no R/W access
-        string text = Path.Combine(Application.dataPath, "gamesettings.json");
+        string text = Path.Combine(Application.dataPath, Path.Combine("StreamingAssets", SETTINGS_FILENAME));
 
         Debug.Log("Settings path: " + text);
         if (!File.Exists(text))
         {
-            File.WriteAllText(text, new Hashtable().toJson());
+            Debug.Log("Gamesettings does not exist, initializing empty " + SETTINGS_FILENAME);
+            Hashtable empty = new Hashtable();
+            empty.Add("device_markers", new Hashtable());
+            File.WriteAllText(text,empty.toJson());
         }
         Hashtable settings = File.ReadAllText(text).hashtableFromJson();
 #else //Hashtable doesn't actually get used on client, but will initialize just to do it...
@@ -39,11 +42,19 @@ public static class GameSettings
 
     
     public static Hashtable GetTable(string key)
-    {
-        if (GameSettings.Settings.Contains(key))
-        {
-            return (Hashtable)GameSettings.Settings[key];
+    { 
+
+        try
+        {    
+            if (GameSettings.Settings.Contains(key))
+                return (Hashtable)GameSettings.Settings[key];
         }
+        catch(Exception e)
+        {
+            Debug.Log("Warning! key '" + key + "' is empty or could not be parsed");
+            return null;
+        }
+        
         return null;
     }
 

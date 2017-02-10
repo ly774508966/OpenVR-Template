@@ -254,7 +254,7 @@ Prefab:
     - target: {fileID: 114000010023732982, guid: e0c206561bfdc324288e5cf0b30ffe84,
         type: 2}
       propertyPath: serverUseOVR
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e0c206561bfdc324288e5cf0b30ffe84, type: 2}
